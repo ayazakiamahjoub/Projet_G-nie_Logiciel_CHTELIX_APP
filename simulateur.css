@@ -1,1 +1,149 @@
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
 
+:root {
+    --marine: #12344d;
+    --bleu: #1f6fa8;
+    --fond: #f4f6f8;
+    --trait: #dde3e9;
+    --trait-fort: #c4ced8;
+    --texte: #1c2833;
+    --texte-doux: #5d6b78;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    background-color: var(--fond);
+}
+
+/* Le body sert de carte centrée : aucune classe à ajouter au HTML */
+body {
+    max-width: 520px;
+    margin: 3rem auto;
+    padding: 2rem 2rem 2.25rem;
+    font-family: 'Public Sans', 'Segoe UI', Tahoma, sans-serif;
+    font-size: 0.97rem;
+    line-height: 1.55;
+    color: var(--texte);
+    background: #fff;
+    border: 1px solid var(--trait);
+    border-top: 3px solid var(--bleu);
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(18, 52, 77, 0.05);
+}
+
+h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    color: var(--marine);
+}
+
+h2 {
+    margin: 0.25rem 0 1.5rem;
+    padding-bottom: 1rem;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--texte-doux);
+    border-bottom: 1px solid var(--trait);
+}
+
+label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+input[type="number"] {
+    width: 100%;
+    margin-bottom: 1.1rem;
+    padding: 0.7rem 0.85rem;
+    font-family: inherit;
+    font-size: 0.97rem;
+    color: var(--texte);
+    background: #fff;
+    border: 1px solid var(--trait-fort);
+    border-radius: 6px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input[type="number"]::placeholder {
+    color: #9aa7b3;
+}
+
+input[type="number"]:hover {
+    border-color: #9aaab8;
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--bleu);
+    box-shadow: 0 0 0 3px rgba(31, 111, 168, 0.2);
+}
+
+button {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    font-family: inherit;
+    font-size: 0.97rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: var(--bleu);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+button:hover {
+    background-color: var(--marine);
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+button:focus-visible {
+    outline: 3px solid rgba(31, 111, 168, 0.45);
+    outline-offset: 2px;
+}
+
+/* Zone de résultat : cachée tant qu'elle est vide */
+#resultat {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.8;
+    color: var(--marine);
+    background: var(--fond);
+    border: 1px solid var(--trait);
+    border-left: 3px solid var(--bleu);
+    border-radius: 6px;
+}
+
+#resultat:empty {
+    display: none;
+}
+
+@media (max-width: 560px) {
+    body {
+        margin: 1rem 0.75rem;
+        padding: 1.5rem 1.15rem 1.75rem;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    button,
+    input[type="number"] {
+        transition: none;
+    }
+}
