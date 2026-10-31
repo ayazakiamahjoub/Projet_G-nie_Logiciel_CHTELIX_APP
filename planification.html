@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHITELIX - Planification logistique</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+            --marine: #12344d;
+            --bleu: #1f6fa8;
+            --fond: #f4f6f8;
+            --trait: #dde3e9;
+            --trait-fort: #c4ced8;
+            --texte: #1c2833;
+            --texte-doux: #5d6b78;
+            --succes: #1a7f5a;
+            --attente: #8a5a00;
+            --danger: #b3382c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Public Sans', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 2.5rem 1.25rem;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            font-size: 0.97rem;
+            line-height: 1.55;
+            color: var(--texte);
+            background-color: var(--fond);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 560px;
+            padding: 1.75rem 2rem 2rem;
+            background: #fff;
+            border: 1px solid var(--trait);
+            border-top: 3px solid var(--bleu);
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(18, 52, 77, 0.05);
+        }
+
+        h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--marine);
+            margin-bottom: 0.25rem;
+        }
+
+        .description {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            font-size: 0.92rem;
+            color: var(--texte-doux);
+            border-bottom: 1px solid var(--trait);
+        }
+
+        .form-group {
+            margin-bottom: 1.1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.7rem 0.85rem;
+            font-size: 0.97rem;
+            color: var(--texte);
+            background: #fff;
+            border: 1px solid var(--trait-fort);
+            border-radius: 6px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        input[type="number"]::placeholder { color: #9aa7b3; }
+        input[type="number"]:hover { border-color: #9aaab8; }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--bleu);
+            box-shadow: 0 0 0 3px rgba(31, 111, 168, 0.2);
+        }
+
+        button {
+            width: 100%;
+            margin-top: 0.4rem;
+            padding: 0.8rem 1rem;
+            font-size: 0.97rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: var(--bleu);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        button:hover { background-color: var(--marine); }
+        button:active { transform: translateY(1px); }
+
+        button:focus-visible {
+            outline: 3px solid rgba(31, 111, 168, 0.45);
+            outline-offset: 2px;
+        }
+
+        /* Résultat */
+        #resultat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--trait);
+        }
+
+        .total-ligne {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .total-ligne span:first-child {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--texte-doux);
+        }
+
+        .total {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--marine);
+        }
+
+        /* Jauge : avancement vers le seuil de 2 500 kg */
+        .jauge {
+            height: 8px;
+            background: #e8edf1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .jauge-remplissage {
+            height: 100%;
+            width: 0;
+            background: var(--bleu);
+            border-radius: 4px;
+            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .jauge-legende {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.3rem;
+            font-size: 0.78rem;
+            color: var(--texte-doux);
+        }
+
+        .message {
+            margin-top: 1.1rem;
+            padding: 0.75rem 0.9rem;
+            font-size: 0.93rem;
+            font-weight: 600;
+            background: var(--fond);
+            border: 1px solid var(--trait);
+            border-left: 3px solid var(--trait-fort);
+            border-radius: 6px;
+        }
+
+        .message[data-etat="succes"]  { color: var(--succes);  border-left-color: var(--succes); }
+        .message[data-etat="attente"] { color: var(--attente); border-left-color: var(--attente); }
+        .message[data-etat="danger"]  { color: var(--danger);  border-left-color: var(--danger); }
+
+        @media (max-width: 560px) {
+            body { padding: 1rem 0.75rem; }
+            .card { padding: 1.25rem 1.1rem 1.5rem; }
+            .total { font-size: 1.5rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            button, input[type="number"], .jauge-remplissage { transition: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="card">
+        <h1>🚚 Planification des collectes</h1>
+        <p class="description">Seuil de rentabilité de l'usine : 2 500 kg.</p>
+
+        <div class="form-group">
+            <label for="tunis">Région Tunis (kg)</label>
+            <input type="number" id="tunis" placeholder="Ex : 1000" min="0" inputmode="decimal">
+        </div>
+        <div class="form-group">
+            <label for="sfax">Région Sfax (kg)</label>
+            <input type="number" id="sfax" placeholder="Ex : 1000" min="0" inputmode="decimal">
+        </div>
+        <div class="form-group">
+            <label for="sousse">Région Sousse (kg)</label>
+            <input type="number" id="sousse" placeholder="Ex : 800" min="0" inputmode="decimal">
+        </div>
+
+        <button type="button" id="btnCalculer">Calculer le besoin</button>
+
+        <div id="resultat" aria-live="polite" hidden>
+            <div class="total-ligne">
+                <span>Poids total prévu</span>
+                <span class="total" id="poidsTotal">0 kg</span>
+            </div>
+            <div class="jauge" role="progressbar" aria-label="Avancement vers le seuil de collecte"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="jauge">
+                <div class="jauge-remplissage" id="jaugeRemplissage"></div>
+            </div>
+            <div class="jauge-legende">
+                <span>0 kg</span>
+                <span>Seuil : 2 500 kg</span>
+            </div>
+            <p class="message" id="messageRecommandation"></p>
+        </div>
+    </main>
+
+    <script>
+        const SEUIL = 2500; // kg, capacité de l'usine
+        const formatKg = (v) => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(v) + ' kg';
+
+        function calculerLogistique() {
+            // Champ vide ou valeur négative = 0
+            const lire = (id) => Math.max(0, parseFloat(document.getElementById(id).value) || 0);
+            const total = lire('tunis') + lire('sfax') + lire('sousse');
+
+            const message = document.getElementById('messageRecommandation');
+            const part = Math.min(100, Math.round((total / SEUIL) * 100));
+
+            document.getElementById('poidsTotal').textContent = formatKg(total);
+            document.getElementById('jaugeRemplissage').style.width = part + '%';
+            document.getElementById('jauge').setAttribute('aria-valuenow', part);
+
+            if (total >= SEUIL) {
+                message.textContent = '🚚 Seuil atteint : envoyez le camion de collecte.';
+                message.dataset.etat = 'succes';
+            } else if (total > 0) {
+                message.textContent = `⏳ Seuil non atteint : il manque ${formatKg(SEUIL - total)}. Attendez d'autres prévisions.`;
+                message.dataset.etat = 'attente';
+            } else {
+                message.textContent = 'Veuillez saisir des prévisions.';
+                message.dataset.etat = 'danger';
+            }
+
+            document.getElementById('resultat').hidden = false;
+        }
+
+        document.getElementById('btnCalculer').addEventListener('click', calculerLogistique);
+    </script>
+
+</body>
+</html>
