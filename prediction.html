@@ -12,27 +12,27 @@
             --bleu: #1f6fa8;
             --bleu-clair: #8fb8d6;
             --fond: #f4f6f8;
+            --surface: #ffffff;
             --trait: #dde3e9;
             --trait-fort: #c4ced8;
             --texte: #1c2833;
             --texte-doux: #5d6b78;
             --succes: #1a7f5a;
             --danger: #b3382c;
+            --largeur: 900px;
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
             font-family: 'Public Sans', 'Segoe UI', Tahoma, sans-serif;
         }
 
         body {
-            min-height: 100vh;
-            padding: 2.5rem 1.25rem;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            min-height: 100vh;
             font-size: 0.97rem;
             line-height: 1.55;
             color: var(--texte);
@@ -40,18 +40,60 @@
             font-variant-numeric: tabular-nums;
         }
 
+        /* ==========================================
+           En-tête
+           ========================================== */
+        .intro {
+            padding: 2rem max(1.25rem, calc((100% - var(--largeur)) / 2)) 1.75rem;
+            background-color: var(--marine);
+            border-bottom: 1px solid #0c2538;
+        }
+
+        .intro .marque {
+            margin-bottom: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            color: var(--bleu-clair);
+        }
+
+        .intro h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+
+        .intro p:last-child {
+            color: #aac3d6;
+            max-width: 62ch;
+        }
+
+        /* ==========================================
+           Carte et formulaire
+           ========================================== */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1.25rem 1rem;
+        }
+
         .card {
             width: 100%;
-            max-width: 560px;
+            max-width: var(--largeur);
+            margin-bottom: 1.5rem;
             padding: 1.75rem 2rem 2rem;
-            background: #fff;
+            background: var(--surface);
             border: 1px solid var(--trait);
             border-top: 3px solid var(--bleu);
             border-radius: 8px;
             box-shadow: 0 1px 2px rgba(18, 52, 77, 0.05);
         }
 
-        h1 {
+        h2 {
             font-size: 1.3rem;
             font-weight: 700;
             line-height: 1.3;
@@ -67,7 +109,25 @@
             border-bottom: 1px solid var(--trait);
         }
 
+        .titre-groupe {
+            margin-bottom: 0.75rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--texte-doux);
+        }
+
+        /* Les 3 mois d'historique côte à côte */
+        .grille-mois {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
         .form-group { margin-bottom: 1.1rem; }
+        .grille-mois .form-group { margin-bottom: 0; }
 
         label {
             display: block;
@@ -76,27 +136,48 @@
             font-weight: 600;
         }
 
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
             padding: 0.7rem 0.85rem;
             font-size: 0.97rem;
             color: var(--texte);
-            background: #fff;
+            background-color: #fff;
             border: 1px solid var(--trait-fort);
             border-radius: 6px;
             transition: border-color 0.15s, box-shadow 0.15s;
         }
 
-        input[type="number"]::placeholder { color: #9aa7b3; }
-        input[type="number"]:hover { border-color: #9aaab8; }
+        /* Liste déroulante : flèche dessinée en CSS, sans image externe */
+        select {
+            padding-right: 2.5rem;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235d6b78' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.95rem center;
+        }
 
-        input[type="number"]:focus {
+        input[type="number"]::placeholder { color: #9aa7b3; }
+
+        input[type="number"]:hover,
+        select:hover { border-color: #9aaab8; }
+
+        input[type="number"]:focus,
+        select:focus {
             outline: none;
             border-color: var(--bleu);
             box-shadow: 0 0 0 3px rgba(31, 111, 168, 0.2);
         }
 
-        button {
+        .aide {
+            margin-top: 0.35rem;
+            font-size: 0.8rem;
+            color: var(--texte-doux);
+        }
+
+        #btnPredict {
             width: 100%;
             margin-top: 0.4rem;
             padding: 0.8rem 1rem;
@@ -110,15 +191,15 @@
             transition: background-color 0.15s;
         }
 
-        button:hover { background-color: var(--marine); }
-        button:active { transform: translateY(1px); }
+        #btnPredict:hover { background-color: var(--marine); }
+        #btnPredict:active { transform: translateY(1px); }
 
-        button:focus-visible {
+        #btnPredict:focus-visible {
             outline: 3px solid rgba(31, 111, 168, 0.45);
             outline-offset: 2px;
         }
 
-        button:disabled {
+        #btnPredict:disabled {
             background-color: #9aaab8;
             cursor: progress;
             transform: none;
@@ -133,8 +214,10 @@
 
         .erreur:empty { display: none; }
 
-        /* Résultat */
-        #resultat {
+        /* ==========================================
+           Résultat
+           ========================================== */
+        .zone-resultat {
             margin-top: 1.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid var(--trait);
@@ -145,6 +228,7 @@
             justify-content: space-between;
             align-items: baseline;
             gap: 1rem;
+            margin-bottom: 0.75rem;
         }
 
         .total-ligne span:first-child {
@@ -153,20 +237,20 @@
             color: var(--texte-doux);
         }
 
-        .total {
+        .valeur-total {
             font-size: 1.75rem;
             font-weight: 700;
             color: var(--marine);
         }
 
         .tendance {
-            margin: 0.1rem 0 1.25rem;
+            margin: -0.4rem 0 1.25rem;
             font-size: 0.88rem;
-            color: var(--texte-doux);
             text-align: right;
+            color: var(--texte-doux);
         }
 
-        /* Graphique : 3 mois saisis + mois prévu */
+        /* Graphique : 3 mois saisis + prévision */
         .graphe {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -179,7 +263,6 @@
         .colonne {
             display: flex;
             flex-direction: column;
-            align-items: stretch;
             text-align: center;
         }
 
@@ -191,13 +274,13 @@
         }
 
         .zone-barre {
-            height: 120px;
             display: flex;
             align-items: flex-end;
+            height: 120px;
             border-bottom: 1px solid var(--trait-fort);
         }
 
-        .barre {
+        .barre-prevision {
             width: 100%;
             min-height: 2px;
             background: var(--bleu);
@@ -207,7 +290,7 @@
         }
 
         /* La valeur prévue est hachurée pour la distinguer des données saisies */
-        .colonne.prevue .barre {
+        .colonne.prevue .barre-prevision {
             background: repeating-linear-gradient(
                 45deg, var(--bleu), var(--bleu) 6px, var(--bleu-clair) 6px, var(--bleu-clair) 12px
             );
@@ -224,7 +307,7 @@
             to   { transform: scaleY(1); }
         }
 
-        .message {
+        .message-etat {
             margin-top: 1.1rem;
             padding: 0.75rem 0.9rem;
             font-size: 0.93rem;
@@ -235,70 +318,127 @@
             border-radius: 6px;
         }
 
-        .message[data-etat="succes"] { color: var(--succes); border-left-color: var(--succes); }
-        .message[data-etat="danger"] { color: var(--danger); border-left-color: var(--danger); }
+        .message-etat:empty { display: none; }
 
-        @media (max-width: 560px) {
-            body { padding: 1rem 0.75rem; }
-            .card { padding: 1.25rem 1.1rem 1.5rem; }
-            .total { font-size: 1.5rem; }
+        .message-etat[data-etat="succes"] { color: var(--succes); border-left-color: var(--succes); }
+        .message-etat[data-etat="danger"] { color: var(--danger); border-left-color: var(--danger); }
+
+        footer {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1.25rem max(1.25rem, calc((100% - var(--largeur)) / 2));
+            font-size: 0.85rem;
+            color: #aac3d6;
+            background-color: var(--marine);
+        }
+
+        /* ==========================================
+           Mobile
+           ========================================== */
+        @media (max-width: 640px) {
+            .intro h1 { font-size: 1.35rem; }
+            main { padding: 1.25rem 0.75rem 0.5rem; }
+            .card { padding: 1.25rem 1rem 1.5rem; }
+            h2 { font-size: 1.15rem; }
+            .grille-mois { grid-template-columns: 1fr; gap: 1.1rem; }
+            .valeur-total { font-size: 1.5rem; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            button, input[type="number"] { transition: none; }
-            .barre { animation: none; }
+            .barre-prevision { animation: none; }
+
+            #btnPredict,
+            input[type="number"],
+            select { transition: none; }
         }
     </style>
 </head>
 <body>
 
-    <main class="card">
-        <h1>🤖 Prédiction IA des collectes</h1>
-        <p class="description">
-            Saisissez l'historique des 3 derniers mois : le modèle Python (régression linéaire)
-            estime la collecte du mois suivant.
-        </p>
+    <header class="intro">
+        <p class="marque">CHITELIX</p>
+        <h1>Plateforme de valorisation des déchets de crabe bleu</h1>
+        <p>Suivi des collectes, estimation du chitosane et prévisions par intelligence artificielle.</p>
+    </header>
 
-        <form id="formPrediction" novalidate>
-            <div class="form-group">
-                <label for="m1">Mois 1 (kg)</label>
-                <input type="number" id="m1" placeholder="Ex : 500" min="0" inputmode="decimal">
+    <main>
+        <section class="card" aria-labelledby="titre-ia">
+            <h2 id="titre-ia">Prédiction IA des collectes</h2>
+            <p class="description">
+                Anticipez les collectes grâce à la régression linéaire et à la saisonnalité du crabe bleu.
+            </p>
+
+            <form id="formPrediction" novalidate>
+                <p class="titre-groupe">Historique des 3 derniers mois</p>
+                <div class="grille-mois">
+                    <div class="form-group">
+                        <label for="m1">Mois 1 (kg)</label>
+                        <input type="number" id="m1" placeholder="Ex : 500" min="0" inputmode="decimal">
+                    </div>
+                    <div class="form-group">
+                        <label for="m2">Mois 2 (kg)</label>
+                        <input type="number" id="m2" placeholder="Ex : 600" min="0" inputmode="decimal">
+                    </div>
+                    <div class="form-group">
+                        <label for="m3">Mois 3 (kg)</label>
+                        <input type="number" id="m3" placeholder="Ex : 700" min="0" inputmode="decimal">
+                    </div>
+                </div>
+
+                <p class="titre-groupe">Période à prévoir</p>
+                <div class="form-group">
+                    <label for="mois">Mois cible (saisonnalité)</label>
+                    <select id="mois">
+                        <option value="1">Janvier (basse saison)</option>
+                        <option value="2">Février (basse saison)</option>
+                        <option value="3">Mars (reprise)</option>
+                        <option value="4">Avril (reprise)</option>
+                        <option value="5">Mai (reprise)</option>
+                        <option value="6">Juin (début de haute saison)</option>
+                        <option value="7">Juillet (pic de pêche)</option>
+                        <option value="8">Août (pic de pêche)</option>
+                        <option value="9">Septembre (haute saison)</option>
+                        <option value="10">Octobre (baisse)</option>
+                        <option value="11">Novembre (basse saison)</option>
+                        <option value="12">Décembre (basse saison)</option>
+                    </select>
+                    <p class="aide">Le modèle tient compte de la saison du mois choisi.</p>
+                </div>
+
+                <button type="submit" id="btnPredict">Lancer la prédiction</button>
+                <p id="erreurPredict" class="erreur" role="alert"></p>
+            </form>
+
+            <div id="resultatPredict" class="zone-resultat" aria-live="polite" hidden>
+                <div class="total-ligne">
+                    <span>Collecte prévue : <span id="moisPrevu"></span></span>
+                    <span class="valeur-total" id="valeurPredict">0 kg</span>
+                </div>
+                <p class="tendance" id="tendance"></p>
+
+                <div class="graphe" id="graphe" role="img"
+                     aria-label="Historique des 3 mois et prévision"></div>
+
+                <p class="message-etat" id="messageLogistique"></p>
             </div>
-            <div class="form-group">
-                <label for="m2">Mois 2 (kg)</label>
-                <input type="number" id="m2" placeholder="Ex : 600" min="0" inputmode="decimal">
-            </div>
-            <div class="form-group">
-                <label for="m3">Mois 3 (kg)</label>
-                <input type="number" id="m3" placeholder="Ex : 700" min="0" inputmode="decimal">
-            </div>
-
-            <button type="submit" id="btnPredict">Lancer la prédiction</button>
-            <p id="erreur" class="erreur" role="alert"></p>
-        </form>
-
-        <div id="resultat" aria-live="polite" hidden>
-            <div class="total-ligne">
-                <span>Collecte prévue au mois 4</span>
-                <span class="total" id="valeurPredict">0 kg</span>
-            </div>
-            <p class="tendance" id="tendance"></p>
-
-            <div class="graphe" id="graphe" role="img" aria-label="Historique des 3 mois et prévision du mois 4"></div>
-
-            <p class="message" id="messageLogistique"></p>
-        </div>
+        </section>
     </main>
 
+    <footer>
+        <p>© 2026 CHITELIX - Projet Génie Logiciel</p>
+    </footer>
+
     <script>
+        'use strict';
+
         const API_URL = 'http://127.0.0.1:5000/predire';
         const API_TIMEOUT_MS = 8000;
         const SEUIL_CAMION = 2500; // kg, capacité de l'usine
 
         const $ = (id) => document.getElementById(id);
-        const formatNombre = (v, max = 0) =>
-            new Intl.NumberFormat('fr-FR', { maximumFractionDigits: max }).format(v);
-        const formatKg = (v) => formatNombre(v, 2) + ' kg';
+        const formatNombre = (valeur, decimales = 2) =>
+            new Intl.NumberFormat('fr-FR', { maximumFractionDigits: decimales }).format(valeur);
+        const formatKg = (valeur) => `${formatNombre(valeur)} kg`;
 
         // Renvoie un nombre, ou NaN si le champ est vide
         function lireNombre(id) {
@@ -306,8 +446,8 @@
             return Number.isFinite(valeur) ? valeur : NaN;
         }
 
-        // Appel à l'API Flask, avec délai maximum
-        async function demanderPrediction(m1, m2, m3) {
+        // ---------- Appel à l'API Flask, avec délai maximum ----------
+        async function demanderPrediction(m1, m2, m3, mois) {
             const controleur = new AbortController();
             const minuteur = setTimeout(() => controleur.abort(), API_TIMEOUT_MS);
 
@@ -315,7 +455,7 @@
                 const reponse = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ m1, m2, m3 }),
+                    body: JSON.stringify({ m1, m2, m3, mois }),
                     signal: controleur.signal
                 });
                 const donnees = await reponse.json();
@@ -329,7 +469,7 @@
             }
         }
 
-        // Barres : 3 mois saisis + mois prévu (hachuré)
+        // ---------- Graphique : 3 mois saisis + prévision (hachurée) ----------
         function afficherGraphique(historique, prediction) {
             const valeurs = [...historique, prediction];
             const max = Math.max(...valeurs, 1);
@@ -340,22 +480,22 @@
                 const prevue = i === valeurs.length - 1;
 
                 const colonne = document.createElement('div');
-                colonne.className = 'colonne' + (prevue ? ' prevue' : '');
+                colonne.className = prevue ? 'colonne prevue' : 'colonne';
 
                 const etiquetteValeur = document.createElement('span');
                 etiquetteValeur.className = 'valeur';
-                etiquetteValeur.textContent = formatNombre(Math.round(valeur));
+                etiquetteValeur.textContent = formatNombre(Math.round(valeur), 0);
 
                 const zone = document.createElement('div');
                 zone.className = 'zone-barre';
                 const barre = document.createElement('div');
-                barre.className = 'barre';
+                barre.className = 'barre-prevision';
                 barre.style.height = `${(valeur / max) * 100}%`;
                 zone.append(barre);
 
                 const libelle = document.createElement('span');
                 libelle.className = 'libelle';
-                libelle.textContent = prevue ? 'Mois 4 (prévu)' : `Mois ${i + 1}`;
+                libelle.textContent = prevue ? 'Prévision' : `Mois ${i + 1}`;
 
                 colonne.append(etiquetteValeur, zone, libelle);
                 graphe.append(colonne);
@@ -377,18 +517,25 @@
             }
         }
 
+        // Nom du mois sélectionné, sans la précision entre parenthèses
+        function nomMoisCible() {
+            return $('mois').selectedOptions[0].text.split(' (')[0];
+        }
+
+        // ---------- Soumission du formulaire ----------
         $('formPrediction').addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const bouton = $('btnPredict');
-            const erreur = $('erreur');
-            const resultat = $('resultat');
+            const erreur = $('erreurPredict');
+            const zone = $('resultatPredict');
             const message = $('messageLogistique');
             const historique = ['m1', 'm2', 'm3'].map(lireNombre);
+            const mois = parseInt($('mois').value, 10);
 
             if (historique.some((v) => !Number.isFinite(v) || v < 0)) {
-                erreur.textContent = '⚠️ Renseignez les 3 mois avec des valeurs positives ou nulles.';
-                resultat.hidden = true;
+                erreur.textContent = "Renseignez l'historique des 3 mois avec des valeurs positives ou nulles.";
+                zone.hidden = true;
                 return;
             }
 
@@ -397,27 +544,28 @@
             bouton.textContent = 'Calcul en cours…';
 
             try {
-                const prediction = await demanderPrediction(...historique);
+                const prediction = await demanderPrediction(...historique, mois);
 
+                $('moisPrevu').textContent = nomMoisCible();
                 $('valeurPredict').textContent = formatKg(Math.round(prediction));
                 afficherTendance(historique[2], prediction);
                 afficherGraphique(historique, prediction);
 
                 if (prediction >= SEUIL_CAMION) {
-                    message.textContent = '🚚 Seuil de 2 500 kg dépassé : prévoyez un grand camion.';
+                    message.textContent = 'Seuil de 2 500 kg dépassé : prévoyez un grand camion.';
                     message.dataset.etat = 'danger';
                 } else {
-                    message.textContent = '✅ Collecte normale prévue : un petit camion suffira.';
+                    message.textContent = 'Collecte normale prévue : un petit camion suffira.';
                     message.dataset.etat = 'succes';
                 }
-                resultat.hidden = false;
+                zone.hidden = false;
             } catch (err) {
-                resultat.hidden = true;
+                zone.hidden = true;
                 // TypeError = serveur injoignable ; AbortError = délai dépassé
                 const injoignable = err instanceof TypeError || err.name === 'AbortError';
                 erreur.textContent = injoignable
-                    ? "⚠️ Le serveur Python ne répond pas. Lancez 'python app.py'."
-                    : `⚠️ ${err.message}`;
+                    ? "Le serveur Python ne répond pas. Lancez 'python app.py'."
+                    : err.message;
             } finally {
                 bouton.disabled = false;
                 bouton.textContent = 'Lancer la prédiction';
