@@ -2,39 +2,356 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>CHITELIX - Simulateur</title>
-    <link rel="stylesheet" href="simulateur.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHITELIX FLOW - Simulateur</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
+
+        :root {
+            --marine: #12344d;
+            --bleu-pale: #8fb8d6;
+            --filet: #5b7f99;
+            --accent: #1f6fa8;
+            --fond: #f4f6f8;
+            --surface: #ffffff;
+            --trait: #dde3e9;
+            --trait-fort: #c4ced8;
+            --texte: #1c2833;
+            --texte-doux: #5d6b78;
+            --danger: #b3382c;
+            --largeur: 900px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Public Sans', 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            font-size: 0.97rem;
+            line-height: 1.55;
+            color: var(--texte);
+            background-color: var(--fond);
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* ==========================================
+           En-tête
+           ========================================== */
+        .entete {
+            width: min(calc(100% - 2.5rem), var(--largeur));
+            margin: 2rem auto 0;
+            padding: 1.9rem 1.5rem 1.6rem;
+            text-align: center;
+            color: #fff;
+            background-color: var(--marine);
+            border-radius: 16px;
+        }
+
+        .entete h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+        }
+
+        .entete .sous-titre {
+            margin-top: 0.9rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--bleu-pale);
+        }
+
+        .entete hr {
+            margin: 1.3rem 0 1.2rem;
+            border: 0;
+            border-top: 1px solid var(--filet);
+        }
+
+        .entete .slogan {
+            max-width: 62ch;
+            margin: 0 auto;
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        /* ==========================================
+           Carte et formulaire
+           ========================================== */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1.5rem 1.25rem 1rem;
+        }
+
+        .card {
+            width: 100%;
+            max-width: var(--largeur);
+            margin-bottom: 1.5rem;
+            padding: 1.75rem 2rem 2rem;
+            background: var(--surface);
+            border: 1px solid var(--trait);
+            border-top: 3px solid var(--accent);
+            border-radius: 12px;
+            box-shadow: 0 1px 2px rgba(18, 52, 77, 0.05);
+        }
+
+        h2 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--marine);
+            margin-bottom: 0.25rem;
+        }
+
+        .description {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            font-size: 0.92rem;
+            color: var(--texte-doux);
+            border-bottom: 1px solid var(--trait);
+        }
+
+        .titre-groupe {
+            margin-bottom: 0.75rem;
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--texte-doux);
+        }
+
+        .form-group { margin-bottom: 1.1rem; }
+
+        label {
+            display: block;
+            margin-bottom: 0.35rem;
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.7rem 0.85rem;
+            font-size: 0.97rem;
+            color: var(--texte);
+            background-color: #fff;
+            border: 1px solid var(--trait-fort);
+            border-radius: 8px;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        input[type="number"]::placeholder { color: #9aa7b3; }
+        input[type="number"]:hover { border-color: #9aaab8; }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(31, 111, 168, 0.2);
+        }
+
+        .aide {
+            margin-top: 0.35rem;
+            font-size: 0.8rem;
+            color: var(--texte-doux);
+        }
+
+        #btnEstimer {
+            width: 100%;
+            margin-top: 0.4rem;
+            padding: 0.8rem 1rem;
+            font-size: 0.97rem;
+            font-weight: 600;
+            color: #fff;
+            background-color: var(--accent);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        #btnEstimer:hover { background-color: var(--marine); }
+        #btnEstimer:active { transform: translateY(1px); }
+
+        #btnEstimer:focus-visible {
+            outline: 3px solid rgba(31, 111, 168, 0.45);
+            outline-offset: 2px;
+        }
+
+        .erreur {
+            margin-top: 0.9rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--danger);
+        }
+
+        .erreur:empty { display: none; }
+
+        /* ==========================================
+           Résultat
+           ========================================== */
+        .zone-resultat {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--trait);
+        }
+
+        .grille-resultats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .resultat-box {
+            padding: 1.1rem 1.25rem;
+            background: var(--fond);
+            border: 1px solid var(--trait);
+            border-left: 3px solid var(--accent);
+            border-radius: 8px;
+        }
+
+        .resultat-box h3 {
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--texte-doux);
+        }
+
+        .resultat-box p {
+            margin-top: 0.15rem;
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1.2;
+            color: var(--marine);
+        }
+
+        .detail-calcul {
+            margin-top: 1rem;
+            font-size: 0.88rem;
+            color: var(--texte-doux);
+        }
+
+        footer {
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1.25rem max(1.25rem, calc((100% - var(--largeur)) / 2));
+            font-size: 0.85rem;
+            color: #aac3d6;
+            background-color: var(--marine);
+        }
+
+        /* ==========================================
+           Mobile
+           ========================================== */
+        @media (max-width: 640px) {
+            .entete { margin-top: 1rem; padding: 1.5rem 1.1rem 1.3rem; }
+            .entete h1 { font-size: 1.5rem; }
+            .entete .sous-titre,
+            .entete .slogan { font-size: 0.95rem; }
+            main { padding: 1.25rem 0.75rem 0.5rem; }
+            .card { padding: 1.25rem 1rem 1.5rem; }
+            h2 { font-size: 1.15rem; }
+            .grille-resultats { grid-template-columns: 1fr; }
+            .resultat-box p { font-size: 1.5rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            #btnEstimer,
+            input[type="number"] { transition: none; }
+        }
+    </style>
 </head>
 <body>
 
-    <h1>CHITELIX</h1>
-    <h2>Saisir les déchets</h2>
+    <header class="entete">
+        <h1>CHITELIX FLOW</h1>
+        <p class="sous-titre">Smart Waste Valorization Platform</p>
+        <hr>
+        <p class="slogan">Une plateforme intelligente pour optimiser la gestion et la valorisation des déchets.</p>
+    </header>
 
-    <label for="poids">Poids des déchets (en kg) :</label>
-    <input type="number" id="poids" placeholder="Ex: 1000">
+    <main>
+        <section class="card" aria-labelledby="titre-simulateur">
+            <h2 id="titre-simulateur">Simulateur de valorisation</h2>
+            <p class="description">
+                Estimez le chitosane extractible et l'impact écologique à partir du poids de vos déchets de crabe bleu.
+            </p>
 
-    <button onclick="calculer()">Estimer ma valorisation</button>
+            <form id="formSimulateur" novalidate>
+                <p class="titre-groupe">Déchets à valoriser</p>
+                <div class="form-group">
+                    <label for="poids">Poids des déchets (en kg)</label>
+                    <input type="number" id="poids" placeholder="Ex : 1000" min="1" inputmode="decimal">
+                    <p class="aide">Rendement appliqué : 15 % de chitosane, soit 150 kg par tonne de déchets.</p>
+                </div>
 
-    <p id="resultat"></p>
+                <button type="submit" id="btnEstimer">Estimer ma valorisation</button>
+                <p id="erreur" class="erreur" role="alert"></p>
+            </form>
+
+            <div id="zoneResultats" class="zone-resultat" aria-live="polite" hidden>
+                <div class="grille-resultats">
+                    <div class="resultat-box">
+                        <h3>Chitosane extractible</h3>
+                        <p id="valeurChitosane">0 kg</p>
+                    </div>
+                    <div class="resultat-box">
+                        <h3>CO₂ évité</h3>
+                        <p id="valeurCO2">0 kg</p>
+                    </div>
+                </div>
+                <p class="detail-calcul" id="detailCalcul"></p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 CHITELIX FLOW - Projet Génie Logiciel</p>
+    </footer>
 
     <script>
-        function calculer() {
-            // Récupérer le poids
-            let poids = document.getElementById('poids').value;
-            
-            if(poids > 0) {
-                // Formule réelle : 15% de chitosane
-                let chitosane = poids * 0.15;
-                // Formule CO2
-                let co2 = chitosane * 2.5;
-                
-                document.getElementById('resultat').innerHTML = 
-                    "Chitosane estimé : " + chitosane + " kg<br>" +
-                    "CO2 évité : " + co2 + " kg";
-            } else {
-                document.getElementById('resultat').innerHTML = "Veuillez saisir un poids valide.";
+        'use strict';
+
+        const TAUX_CHITOSANE = 0.15; // 15 % : 1 tonne de déchets = 150 kg de chitosane
+        const CO2_PAR_KG = 2.5;      // kg de CO2 évités par kg de chitosane
+
+        const $ = (id) => document.getElementById(id);
+        const formatKg = (valeur) =>
+            new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 2 }).format(valeur) + ' kg';
+
+        $('formSimulateur').addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            const poids = parseFloat($('poids').value);
+            const erreur = $('erreur');
+            const zone = $('zoneResultats');
+
+            if (!Number.isFinite(poids) || poids <= 0) {
+                erreur.textContent = 'Veuillez saisir un poids valide (supérieur à 0).';
+                zone.hidden = true;
+                return;
             }
-        }
+
+            erreur.textContent = '';
+            const chitosane = poids * TAUX_CHITOSANE;
+            const co2 = chitosane * CO2_PAR_KG;
+
+            $('valeurChitosane').textContent = formatKg(chitosane);
+            $('valeurCO2').textContent = formatKg(co2);
+            $('detailCalcul').textContent =
+                `${formatKg(poids)} × 15 % = ${formatKg(chitosane)} de chitosane ; ` +
+                `${formatKg(chitosane)} × 2,5 = ${formatKg(co2)} de CO₂ évités.`;
+            zone.hidden = false;
+        });
     </script>
 
 </body>
