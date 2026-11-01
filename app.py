@@ -3,7 +3,7 @@ from flask_cors import CORS
 from modele_ia import predire_collecte
 
 app = Flask(__name__)
-CORS(app) # Permet à ton site HTML de parler avec Python
+CORS(app)
 
 @app.route('/predire', methods=['POST'])
 def predire():
@@ -11,8 +11,9 @@ def predire():
     m1 = float(data['m1'])
     m2 = float(data['m2'])
     m3 = float(data['m3'])
+    mois = int(data['mois']) # Récupère le mois choisi sur le site
 
-    resultat = predire_collecte(m1, m2, m3)
+    resultat = predire_collecte(m1, m2, m3, mois)
 
     return jsonify({'prediction': resultat})
 
