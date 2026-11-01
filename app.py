@@ -11,7 +11,7 @@ def predire():
     m1 = float(data['m1'])
     m2 = float(data['m2'])
     m3 = float(data['m3'])
-    mois = int(data['mois']) # Récupère le mois choisi sur le site
+    mois = int(data['mois']) 
 
     resultat = predire_collecte(m1, m2, m3, mois)
 
