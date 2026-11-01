@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHITELIX - Prédiction IA</title>
+    <title>CHITELIX FLOW - Prédiction IA</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
 
         :root {
             --marine: #12344d;
-            --bleu: #1f6fa8;
-            --bleu-clair: #8fb8d6;
+            --bleu-pale: #8fb8d6;
+            --filet: #5b7f99;
+            --accent: #1f6fa8;
+            --accent-clair: #8fb8d6;
             --fond: #f4f6f8;
             --surface: #ffffff;
             --trait: #dde3e9;
@@ -43,31 +45,44 @@
         /* ==========================================
            En-tête
            ========================================== */
-        .intro {
-            padding: 2rem max(1.25rem, calc((100% - var(--largeur)) / 2)) 1.75rem;
-            background-color: var(--marine);
-            border-bottom: 1px solid #0c2538;
-        }
-
-        .intro .marque {
-            margin-bottom: 0.5rem;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 0.14em;
-            color: var(--bleu-clair);
-        }
-
-        .intro h1 {
-            font-size: 1.6rem;
-            font-weight: 700;
-            line-height: 1.25;
+        .entete {
+            width: min(calc(100% - 2.5rem), var(--largeur));
+            margin: 2rem auto 0;
+            padding: 1.9rem 1.5rem 1.6rem;
+            text-align: center;
             color: #fff;
-            margin-bottom: 0.3rem;
+            background-color: var(--marine);
+            border-radius: 16px;
         }
 
-        .intro p:last-child {
-            color: #aac3d6;
+        .entete h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
+        }
+
+        .entete .sous-titre {
+            margin-top: 0.9rem;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--bleu-pale);
+        }
+
+        .entete hr {
+            margin: 1.3rem 0 1.2rem;
+            border: 0;
+            border-top: 1px solid var(--filet);
+        }
+
+        .entete .slogan {
             max-width: 62ch;
+            margin: 0 auto;
+            font-size: 1.05rem;
+            font-weight: 700;
+            line-height: 1.45;
         }
 
         /* ==========================================
@@ -78,7 +93,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 2rem 1.25rem 1rem;
+            padding: 1.5rem 1.25rem 1rem;
         }
 
         .card {
@@ -88,8 +103,8 @@
             padding: 1.75rem 2rem 2rem;
             background: var(--surface);
             border: 1px solid var(--trait);
-            border-top: 3px solid var(--bleu);
-            border-radius: 8px;
+            border-top: 3px solid var(--accent);
+            border-radius: 12px;
             box-shadow: 0 1px 2px rgba(18, 52, 77, 0.05);
         }
 
@@ -144,7 +159,7 @@
             color: var(--texte);
             background-color: #fff;
             border: 1px solid var(--trait-fort);
-            border-radius: 6px;
+            border-radius: 8px;
             transition: border-color 0.15s, box-shadow 0.15s;
         }
 
@@ -167,7 +182,7 @@
         input[type="number"]:focus,
         select:focus {
             outline: none;
-            border-color: var(--bleu);
+            border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(31, 111, 168, 0.2);
         }
 
@@ -184,9 +199,9 @@
             font-size: 0.97rem;
             font-weight: 600;
             color: #fff;
-            background-color: var(--bleu);
+            background-color: var(--accent);
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: background-color 0.15s;
         }
@@ -257,7 +272,7 @@
             gap: 0.75rem;
             padding: 1rem 1rem 0.75rem;
             border: 1px solid var(--trait);
-            border-radius: 6px;
+            border-radius: 8px;
         }
 
         .colonne {
@@ -283,7 +298,7 @@
         .barre-prevision {
             width: 100%;
             min-height: 2px;
-            background: var(--bleu);
+            background: var(--accent);
             border-radius: 3px 3px 0 0;
             transform-origin: bottom;
             animation: monter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -292,7 +307,7 @@
         /* La valeur prévue est hachurée pour la distinguer des données saisies */
         .colonne.prevue .barre-prevision {
             background: repeating-linear-gradient(
-                45deg, var(--bleu), var(--bleu) 6px, var(--bleu-clair) 6px, var(--bleu-clair) 12px
+                45deg, var(--accent), var(--accent) 6px, var(--accent-clair) 6px, var(--accent-clair) 12px
             );
         }
 
@@ -315,7 +330,7 @@
             background: var(--fond);
             border: 1px solid var(--trait);
             border-left: 3px solid var(--trait-fort);
-            border-radius: 6px;
+            border-radius: 8px;
         }
 
         .message-etat:empty { display: none; }
@@ -336,7 +351,10 @@
            Mobile
            ========================================== */
         @media (max-width: 640px) {
-            .intro h1 { font-size: 1.35rem; }
+            .entete { margin-top: 1rem; padding: 1.5rem 1.1rem 1.3rem; }
+            .entete h1 { font-size: 1.5rem; }
+            .entete .sous-titre,
+            .entete .slogan { font-size: 0.95rem; }
             main { padding: 1.25rem 0.75rem 0.5rem; }
             .card { padding: 1.25rem 1rem 1.5rem; }
             h2 { font-size: 1.15rem; }
@@ -355,10 +373,11 @@
 </head>
 <body>
 
-    <header class="intro">
-        <p class="marque">CHITELIX</p>
-        <h1>Plateforme de valorisation des déchets de crabe bleu</h1>
-        <p>Suivi des collectes, estimation du chitosane et prévisions par intelligence artificielle.</p>
+    <header class="entete">
+        <h1>CHITELIX FLOW</h1>
+        <p class="sous-titre">Smart Waste Valorization Platform</p>
+        <hr>
+        <p class="slogan">Une plateforme intelligente pour optimiser la gestion et la valorisation des déchets.</p>
     </header>
 
     <main>
@@ -425,7 +444,7 @@
     </main>
 
     <footer>
-        <p>© 2026 CHITELIX - Projet Génie Logiciel</p>
+        <p>© 2026 CHITELIX FLOW - Projet Génie Logiciel</p>
     </footer>
 
     <script>
