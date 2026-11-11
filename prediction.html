@@ -287,7 +287,7 @@
                 afficherGraphique(historique, prediction);
 
                 if (prediction > CAPACITE_PETIT_CAMION) {
-                    message.textContent = 'La quantité prévue dépasse la capacité du petit camion. Prévoyez un véhicule adapté.';
+                    message.textContent = 'La quantité prévue dépasse la capacité du petit camion. Attendre et prévoyez un véhicule adapté.';
                     message.dataset.etat = 'danger';
                 } else {
                     message.textContent = 'La quantité prévue peut être transportée par un petit camion.';
