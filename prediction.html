@@ -1,306 +1,253 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHITELIX FLOW - Prévision Intelligente</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
-
-        :root {
-            --marine: #12344d;
-            --bleu-pale: #8fb8d6;
-            --filet: #5b7f99;
-            --accent: #1f6fa8;
-            --accent-clair: #8fb8d6;
-            --fond: #f4f6f8;
-            --surface: #ffffff;
-            --trait: #dde3e9;
-            --trait-fort: #c4ced8;
-            --texte: #1c2833;
-            --texte-doux: #5d6b78;
-            --succes: #1a7f5a;
-            --danger: #b3382c;
-            --largeur: 900px;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Public Sans', 'Segoe UI', Tahoma, sans-serif; }
-        body { display: flex; flex-direction: column; min-height: 100vh; font-size: 0.97rem; line-height: 1.55; color: var(--texte); background-color: var(--fond); font-variant-numeric: tabular-nums; }
-
-        .entete { width: min(calc(100% - 2.5rem), var(--largeur)); margin: 2rem auto 0; padding: 1.9rem 1.5rem 1.6rem; text-align: center; color: #fff; background-color: var(--marine); border-radius: 16px; }
-        .entete h1 { font-size: 1.9rem; font-weight: 700; line-height: 1.2; letter-spacing: 0.01em; }
-        .entete .sous-titre { margin-top: 0.9rem; font-size: 1.05rem; font-weight: 600; letter-spacing: 0.03em; text-transform: uppercase; color: var(--bleu-pale); }
-        .entete hr { margin: 1.3rem 0 1.2rem; border: 0; border-top: 1px solid var(--filet); }
-        .entete .slogan { max-width: 62ch; margin: 0 auto; font-size: 1.05rem; font-weight: 700; line-height: 1.45; }
-
-        main { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1.25rem 1rem; }
-        .card { width: 100%; max-width: var(--largeur); margin-bottom: 1.5rem; padding: 1.75rem 2rem 2rem; background: var(--surface); border: 1px solid var(--trait); border-top: 3px solid var(--accent); border-radius: 12px; box-shadow: 0 1px 2px rgba(18, 52, 77, 0.05); }
-        h2 { font-size: 1.3rem; font-weight: 700; line-height: 1.3; color: var(--marine); margin-bottom: 0.25rem; }
-        .description { margin-bottom: 1.5rem; padding-bottom: 1rem; font-size: 0.92rem; color: var(--texte-doux); border-bottom: 1px solid var(--trait); }
-        .titre-groupe { margin-bottom: 0.75rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--texte-doux); }
-
-        .grille-mois { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-        .form-group { margin-bottom: 1.1rem; }
-        .grille-mois .form-group { margin-bottom: 0; }
-        label { display: block; margin-bottom: 0.35rem; font-size: 0.88rem; font-weight: 600; }
-
-        input[type="number"], select { width: 100%; padding: 0.7rem 0.85rem; font-size: 0.97rem; color: var(--texte); background-color: #fff; border: 1px solid var(--trait-fort); border-radius: 8px; transition: border-color 0.15s, box-shadow 0.15s; }
-        select { padding-right: 2.5rem; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235d6b78' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.95rem center; }
-        input[type="number"]:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(31, 111, 168, 0.2); }
-        .aide { margin-top: 0.35rem; font-size: 0.8rem; color: var(--texte-doux); }
-
-        #btnPredict { width: 100%; margin-top: 0.4rem; padding: 0.8rem 1rem; font-size: 0.97rem; font-weight: 600; color: #fff; background-color: var(--accent); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.15s; }
-        #btnPredict:hover { background-color: var(--marine); }
-        #btnPredict:disabled { background-color: #9aaab8; cursor: progress; }
-
-        .erreur { margin-top: 0.9rem; font-size: 0.9rem; font-weight: 600; color: var(--danger); }
-        .erreur:empty { display: none; }
-
-        .zone-resultat { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--trait); }
-        .total-ligne { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.75rem; }
-        .total-ligne span:first-child { font-size: 0.88rem; font-weight: 500; color: var(--texte-doux); }
-        .valeur-total { font-size: 1.75rem; font-weight: 700; color: var(--marine); }
-        .tendance { margin: -0.4rem 0 1.25rem; font-size: 0.88rem; text-align: right; color: var(--texte-doux); }
-
-        .graphe { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; padding: 1rem 1rem 0.75rem; border: 1px solid var(--trait); border-radius: 8px; }
-        .colonne { display: flex; flex-direction: column; text-align: center; }
-        .colonne .valeur { margin-bottom: 0.3rem; font-size: 0.8rem; font-weight: 600; color: var(--marine); }
-        .zone-barre { display: flex; align-items: flex-end; height: 120px; border-bottom: 1px solid var(--trait-fort); }
-        .barre-prevision { width: 100%; min-height: 2px; background: var(--accent); border-radius: 3px 3px 0 0; transform-origin: bottom; animation: monter 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
-        .colonne.prevue .barre-prevision { background: repeating-linear-gradient(45deg, var(--accent), var(--accent) 6px, var(--accent-clair) 6px, var(--accent-clair) 12px); }
-        .colonne .libelle { margin-top: 0.4rem; font-size: 0.78rem; color: var(--texte-doux); }
-        @keyframes monter { from { transform: scaleY(0); } to { transform: scaleY(1); } }
-
-        .message-etat { margin-top: 1.1rem; padding: 0.75rem 0.9rem; font-size: 0.93rem; font-weight: 600; background: var(--fond); border: 1px solid var(--trait); border-left: 3px solid var(--trait-fort); border-radius: 8px; }
-        .message-etat:empty { display: none; }
-        .message-etat[data-etat="succes"] { color: var(--succes); border-left-color: var(--succes); }
-        .message-etat[data-etat="danger"] { color: var(--danger); border-left-color: var(--danger); }
-
-        footer { width: 100%; margin-top: 1rem; padding: 1.25rem max(1.25rem, calc((100% - var(--largeur)) / 2)); font-size: 0.85rem; color: #aac3d6; background-color: var(--marine); }
-
-        @media (max-width: 640px) {
-            .entete { margin-top: 1rem; padding: 1.5rem 1.1rem 1.3rem; }
-            .entete h1 { font-size: 1.5rem; }
-            main { padding: 1.25rem 0.75rem 0.5rem; }
-            .card { padding: 1.25rem 1rem 1.5rem; }
-            .grille-mois { grid-template-columns: 1fr; gap: 1.1rem; }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHITELIX FLOW - Prédiction et aide à la décision</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap');
+:root{--marine:#12344d;--bleu-pale:#8fb8d6;--filet:#5b7f99;--accent:#1f6fa8;--fond:#f4f6f8;--surface:#fff;--trait:#dde3e9;--trait-fort:#c4ced8;--texte:#1c2833;--texte-doux:#5d6b78;--succes:#1a7f5a;--danger:#b3382c;--largeur:900px}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Public Sans','Segoe UI',Tahoma,sans-serif}
+body{display:flex;flex-direction:column;min-height:100vh;font-size:.97rem;line-height:1.55;color:var(--texte);background:var(--fond)}
+.entete{width:min(calc(100% - 2.5rem),var(--largeur));margin:2rem auto 0;padding:1.9rem 1.5rem 1.6rem;text-align:center;color:#fff;background:var(--marine);border-radius:16px}
+.entete h1{font-size:1.9rem}
+.sous-titre{margin-top:.9rem;font-weight:600;text-transform:uppercase;color:var(--bleu-pale)}
+.entete hr{margin:1.3rem 0 1.2rem;border:0;border-top:1px solid var(--filet)}
+.slogan{font-weight:700}
+main{flex:1;display:flex;flex-direction:column;align-items:center;padding:1.5rem 1.25rem 1rem}
+.card{width:100%;max-width:var(--largeur);padding:1.75rem 2rem 2rem;background:var(--surface);border:1px solid var(--trait);border-top:3px solid var(--accent);border-radius:12px}
+h2{font-size:1.3rem;color:var(--marine);margin-bottom:.25rem}
+.description{margin-bottom:1.5rem;padding-bottom:1rem;font-size:.92rem;color:var(--texte-doux);border-bottom:1px solid var(--trait)}
+.titre-groupe{margin-bottom:.75rem;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--texte-doux)}
+.grille-mois{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.form-group{margin-bottom:1.1rem}.grille-mois .form-group{margin-bottom:0}
+label{display:block;margin-bottom:.35rem;font-size:.88rem;font-weight:600}
+input,select{width:100%;padding:.7rem .85rem;font-size:.97rem;border:1px solid var(--trait-fort);border-radius:8px;background:#fff}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(31,111,168,.2)}
+.aide{margin-top:.35rem;font-size:.8rem;color:var(--texte-doux)}
+#btnPredict{width:100%;margin-top:.4rem;padding:.8rem 1rem;font-size:.97rem;font-weight:600;color:#fff;background:var(--accent);border:none;border-radius:8px;cursor:pointer}
+#btnPredict:hover{background:var(--marine)}#btnPredict:disabled{background:#9aaab8;cursor:progress}
+.erreur{margin-top:.9rem;font-weight:600;color:var(--danger)}.erreur:empty{display:none}
+.zone-resultat{margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--trait)}
+.total-ligne{display:flex;justify-content:space-between;align-items:baseline;gap:1rem;margin-bottom:.75rem;color:var(--texte-doux)}
+.valeur-total{font-size:1.75rem;font-weight:700;color:var(--marine)}
+.tendance{margin:-.4rem 0 1.25rem;font-size:.88rem;text-align:right;color:var(--texte-doux)}
+.graphe{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem;padding:1rem 1rem .75rem;border:1px solid var(--trait);border-radius:8px}
+.colonne{display:flex;flex-direction:column;text-align:center}
+.valeur{margin-bottom:.3rem;font-size:.8rem;font-weight:600;color:var(--marine)}
+.zone-barre{display:flex;align-items:flex-end;height:120px;border-bottom:1px solid var(--trait-fort)}
+.barre{width:100%;min-height:2px;background:var(--accent);border-radius:3px 3px 0 0}
+.colonne.prevue .barre{background:repeating-linear-gradient(45deg,var(--accent),var(--accent) 6px,var(--bleu-pale) 6px,var(--bleu-pale) 12px)}
+.libelle{margin-top:.4rem;font-size:.78rem;color:var(--texte-doux)}
+.message-etat{margin-top:1.1rem;padding:.75rem .9rem;font-weight:600;background:var(--fond);border:1px solid var(--trait);border-left:3px solid var(--trait-fort);border-radius:8px}
+.message-etat[data-etat=succes]{color:var(--succes);border-left-color:var(--succes)}
+.message-etat[data-etat=danger]{color:#8a5a00;border-left-color:#d99a00}
+footer{margin-top:1rem;padding:1.25rem;font-size:.85rem;color:#aac3d6;background:var(--marine);text-align:center}
+@media(max-width:640px){.grille-mois{grid-template-columns:1fr}.card{padding:1.25rem 1rem}}
+</style>
 </head>
 <body>
+<header class="entete">
+  <h1>CHITELIX FLOW</h1>
+  <p class="sous-titre">Smart Waste Valorization Platform</p>
+  <hr>
+  <p class="slogan">Une plateforme intelligente pour optimiser la gestion et la valorisation des déchets.</p>
+</header>
 
-    <header class="entete">
-        <h1>CHITELIX FLOW</h1>
-        <p class="sous-titre">Smart Waste Valorization Platform</p>
-        <hr>
-        <p class="slogan">Une plateforme intelligente pour optimiser la gestion et la valorisation des déchets.</p>
-    </header>
+<main>
+<section class="card" aria-labelledby="titre-ia">
+  <h2 id="titre-ia">Prédiction et aide à la décision</h2>
+  <p class="description">Prévision des quantités de déchets par régression linéaire, avec prise en compte de la saisonnalité du crabe bleu.</p>
 
-    <main>
-        <section class="card" aria-labelledby="titre-ia">
-            <h2 id="titre-ia">Prévision intelligente des collectes</h2>
-            <p class="description">
-                Anticipez les collectes grâce à la régression linéaire et à la saisonnalité du crabe bleu.
-            </p>
+  <form id="formPrediction" novalidate>
+    <p class="titre-groupe">Historique des collectes (3 mois)</p>
+    <div class="grille-mois">
+      <div class="form-group"><label for="m1" id="lib1">Mois 1 (kg)</label><input type="number" id="m1" placeholder="Ex : 500" min="0" inputmode="decimal"></div>
+      <div class="form-group"><label for="m2" id="lib2">Mois 2 (kg)</label><input type="number" id="m2" placeholder="Ex : 600" min="0" inputmode="decimal"></div>
+      <div class="form-group"><label for="m3" id="lib3">Mois 3 (kg)</label><input type="number" id="m3" placeholder="Ex : 700" min="0" inputmode="decimal"></div>
+    </div>
 
-            <form id="formPrediction" novalidate>
-                <p class="titre-groupe">Historique des collectes (3 derniers mois)</p>
-                <div class="grille-mois">
-                    <div class="form-group">
-                        <label for="m1">Mois 1 (kg)</label>
-                        <input type="number" id="m1" placeholder="Ex : 500" min="0" inputmode="decimal">
-                    </div>
-                    <div class="form-group">
-                        <label for="m2">Mois 2 (kg)</label>
-                        <input type="number" id="m2" placeholder="Ex : 600" min="0" inputmode="decimal">
-                    </div>
-                    <div class="form-group">
-                        <label for="m3">Mois 3 (kg)</label>
-                        <input type="number" id="m3" placeholder="Ex : 700" min="0" inputmode="decimal">
-                    </div>
-                </div>
+    <p class="titre-groupe">Période à prévoir</p>
+    <div class="form-group">
+      <label for="mois">Dernier mois de l'historique (mois 3)</label>
+      <select id="mois">
+        <option value="1">Janvier</option><option value="2">Février</option><option value="3">Mars</option>
+        <option value="4">Avril</option><option value="5">Mai</option><option value="6">Juin</option>
+        <option value="7">Juillet</option><option value="8">Août</option><option value="9">Septembre</option>
+        <option value="10">Octobre</option><option value="11">Novembre</option><option value="12">Décembre</option>
+      </select>
+      <p class="aide">Le système prévoit automatiquement le mois suivant.</p>
+    </div>
 
-                <p class="titre-groupe">Période à prévoir</p>
-                <div class="form-group">
-                    <label for="dernier_mois">Dernier mois de l'historique</label>
-                    <select id="dernier_mois">
-                        <option value="1">Janvier</option>
-                        <option value="2">Février</option>
-                        <option value="3">Mars</option>
-                        <option value="4">Avril</option>
-                        <option value="5">Mai</option>
-                        <option value="6">Juin</option>
-                        <option value="7">Juillet</option>
-                        <option value="8">Août</option>
-                        <option value="9">Septembre</option>
-                        <option value="10">Octobre</option>
-                        <option value="11">Novembre</option>
-                        <option value="12">Décembre</option>
-                    </select>
-                    <p class="aide">Le système prévoit automatiquement le mois suivant.</p>
-                </div>
+    <button type="submit" id="btnPredict">Lancer la prédiction</button>
+    <p id="erreurPredict" class="erreur" role="alert"></p>
+  </form>
 
-                <button type="submit" id="btnPredict">Lancer la prévision</button>
-                <p id="erreurPredict" class="erreur" role="alert"></p>
-            </form>
+  <div id="resultatPredict" class="zone-resultat" aria-live="polite" hidden>
+    <div class="total-ligne">
+      <span>Collecte prévue : <span id="moisPrevu"></span></span>
+      <span class="valeur-total" id="valeurPredict">0 kg</span>
+    </div>
+    <p class="tendance" id="tendance"></p>
+    <div class="graphe" id="graphe" role="img" aria-label="Historique des 3 mois et prévision"></div>
+    <p class="message-etat" id="messageLogistique"></p>
+  </div>
+</section>
+</main>
 
-            <div id="resultatPredict" class="zone-resultat" aria-live="polite" hidden>
-                <div class="total-ligne">
-                    <span>Collecte prévue : <span id="moisPrevu"></span></span>
-                    <span class="valeur-total" id="valeurPredict">0 kg</span>
-                </div>
-                <p class="tendance" id="tendance"></p>
+<footer><p>© 2026 CHITELIX FLOW - Projet Génie Logiciel</p></footer>
 
-                <div class="graphe" id="graphe" role="img" aria-label="Historique des 3 mois et prévision"></div>
+<script>
+'use strict';
 
-                <p class="message-etat" id="messageLogistique"></p>
-            </div>
-        </section>
-    </main>
+// ==========================================
+// Paramètres (CHIT-34 : seuil de 2 500 kg)
+// ==========================================
+const SEUIL_COLLECTE = 2500; // kg
 
-    <footer>
-        <p>© 2026 CHITELIX FLOW - Projet Génie Logiciel</p>
-    </footer>
+// Hypothèses de saisonnalité du crabe bleu (à valider avec des données réelles)
+const COEFFICIENTS_SAISON = {
+  1: 0.8, 2: 0.8, 3: 0.9, 4: 1.0, 5: 1.1,
+  6: 1.3, 7: 1.5, 8: 1.5, 9: 1.3, 10: 1.1, 11: 0.9, 12: 0.8
+};
 
-    <script>
-        'use strict';
+const $ = (id) => document.getElementById(id);
 
-        const CAPACITE_PETIT_CAMION = 2500; // kg
+const NOMS_MOIS = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
 
-        const $ = (id) => document.getElementById(id);
-        const formatNombre = (valeur, decimales = 2) =>
-            new Intl.NumberFormat('fr-FR', { maximumFractionDigits: decimales }).format(valeur);
-        const formatKg = (valeur) => `${formatNombre(valeur)} kg`;
+// Affiche le nom des 3 mois d'historique selon le dernier mois choisi
+function majLibelles() {
+  const dernier = parseInt($('mois').value, 10);
+  const m2 = ((dernier + 10) % 12) + 1, m1 = ((dernier + 9) % 12) + 1;
+  $('lib1').textContent = `Mois 1 : ${NOMS_MOIS[m1 - 1]} (kg)`;
+  $('lib2').textContent = `Mois 2 : ${NOMS_MOIS[m2 - 1]} (kg)`;
+  $('lib3').textContent = `Mois 3 : ${NOMS_MOIS[dernier - 1]} (kg)`;
+}
+$('mois').addEventListener('change', majLibelles);
+majLibelles();
+const fmt = (v, d = 0) => new Intl.NumberFormat('fr-FR', { maximumFractionDigits: d }).format(v);
 
-        function lireNombre(id) {
-            const valeur = parseFloat($(id).value);
-            return Number.isFinite(valeur) ? valeur : NaN;
-        }
+function lireNombre(id) {
+  const v = parseFloat($(id).value);
+  return Number.isFinite(v) ? v : NaN;
+}
 
-        // ==========================================
-        // LE MODÈLE D'IA (Directement en JavaScript)
-        // ==========================================
-        function calculerPrediction(m1, m2, m3, dernier_mois) {
-            // 1. Calcul de la tendance (Régression Linéaire simple)
-            // Formule pour 3 points équidistants : Pente = (M3 - M1) / 2
-            let pente = (m3 - m1) / 2;
-            let prediction_base = m3 + pente;
-            
-            // 2. Détermination du mois suivant
-            let mois_cible = (dernier_mois % 12) + 1;
+// ==========================================
+// MODÈLE (CHIT-55 / CHIT-56) : régression linéaire
+// ==========================================
+const moisPrecedent = (m) => ((m - 2 + 12) % 12) + 1;
 
-            // 3. Coefficients de saisonnalité
-            const facteurs = {
-                1: 0.8, 2: 0.8, 3: 0.9, 4: 1.0, 5: 1.1, 6: 1.3,
-                7: 1.5, 8: 1.5, 9: 1.3, 10: 1.1, 11: 0.9, 12: 0.8
-            };
-            let coefficient = facteurs[mois_cible];
+// Régression linéaire par moindres carrés (équivalent de LinearRegression de scikit-learn)
+function regressionLineaire(xs, ys) {
+  const n = xs.length;
+  const mx = xs.reduce((a, b) => a + b, 0) / n;
+  const my = ys.reduce((a, b) => a + b, 0) / n;
+  let num = 0, den = 0;
+  for (let i = 0; i < n; i++) {
+    num += (xs[i] - mx) * (ys[i] - my);
+    den += (xs[i] - mx) ** 2;
+  }
+  const pente = num / den;
+  const origine = my - pente * mx;
+  return (x) => origine + pente * x;
+}
 
-            // 4. Calcul final
-            let prediction_finale = prediction_base * coefficient;
-            if (prediction_finale < 0) prediction_finale = 0;
+// m1, m2, m3 = les 3 mois juste avant moisCible
+function predireCollecte(m1, m2, m3, moisCible) {
+  const mois3 = moisPrecedent(moisCible);
+  const mois2 = moisPrecedent(mois3);
+  const mois1 = moisPrecedent(mois2);
 
-            // 5. Noms des mois
-            const nomsMois = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+  // 1. Désaisonnaliser l'historique
+  const y = [
+    m1 / COEFFICIENTS_SAISON[mois1],
+    m2 / COEFFICIENTS_SAISON[mois2],
+    m3 / COEFFICIENTS_SAISON[mois3]
+  ];
 
-            return {
-                prediction: prediction_finale,
-                nom_mois: nomsMois[mois_cible - 1]
-            };
-        }
+  // 2. Régression linéaire sur la tendance, prévision du mois 4
+  const base = regressionLineaire([1, 2, 3], y)(4);
 
-        function afficherGraphique(historique, prediction) {
-            const valeurs = [...historique, prediction];
-            const max = Math.max(...valeurs, 1);
-            const graphe = $('graphe');
-            graphe.replaceChildren();
+  // 3. Réappliquer la saisonnalité du mois cible
+  return Math.max(base * COEFFICIENTS_SAISON[moisCible], 0);
+}
 
-            valeurs.forEach((valeur, i) => {
-                const prevue = i === valeurs.length - 1;
-                const colonne = document.createElement('div');
-                colonne.className = prevue ? 'colonne prevue' : 'colonne';
+// CHIT-34 / CHIT-35 : comparer au seuil -> camion ou attente
+function recommander(prediction) {
+  return prediction >= SEUIL_COLLECTE ? 'camion' : 'attente';
+}
 
-                const etiquetteValeur = document.createElement('span');
-                etiquetteValeur.className = 'valeur';
-                etiquetteValeur.textContent = formatNombre(Math.round(valeur), 0);
+// ==========================================
+// AFFICHAGE (CHIT-58 / CHIT-59)
+// ==========================================
+function afficherGraphique(historique, prediction) {
+  const valeurs = [...historique, prediction];
+  const max = Math.max(...valeurs, 1);
+  const graphe = $('graphe');
+  graphe.replaceChildren();
+  valeurs.forEach((valeur, i) => {
+    const prevue = i === valeurs.length - 1;
+    const col = document.createElement('div');
+    col.className = prevue ? 'colonne prevue' : 'colonne';
+    const val = document.createElement('span');
+    val.className = 'valeur';
+    val.textContent = fmt(Math.round(valeur));
+    const zone = document.createElement('div');
+    zone.className = 'zone-barre';
+    const barre = document.createElement('div');
+    barre.className = 'barre';
+    barre.style.height = `${(valeur / max) * 100}%`;
+    zone.append(barre);
+    const lib = document.createElement('span');
+    lib.className = 'libelle';
+    lib.textContent = prevue ? 'Prévision' : `Mois ${i + 1}`;
+    col.append(val, zone, lib);
+    graphe.append(col);
+  });
+}
 
-                const zone = document.createElement('div');
-                zone.className = 'zone-barre';
-                const barre = document.createElement('div');
-                barre.className = 'barre-prevision';
-                barre.style.height = `${(valeur / max) * 100}%`;
-                zone.append(barre);
+function afficherTendance(dernier, prediction) {
+  const el = $('tendance');
+  if (dernier <= 0) { el.textContent = ''; return; }
+  const variation = ((prediction - dernier) / dernier) * 100;
+  el.textContent = Math.abs(variation) < 0.5
+    ? 'Stable par rapport au mois 3'
+    : `${variation > 0 ? 'Hausse' : 'Baisse'} de ${fmt(Math.abs(variation), 1)} % par rapport au mois 3`;
+}
 
-                const libelle = document.createElement('span');
-                libelle.className = 'libelle';
-                libelle.textContent = prevue ? 'Prévision' : `Mois ${i + 1}`;
+$('formPrediction').addEventListener('submit', (event) => {
+  event.preventDefault();
+  const erreur = $('erreurPredict');
+  const zone = $('resultatPredict');
+  const message = $('messageLogistique');
+  const historique = ['m1', 'm2', 'm3'].map(lireNombre);
+  const dernierMois = parseInt($('mois').value, 10);
+  const mois = (dernierMois % 12) + 1; // mois à prévoir = mois suivant
 
-                colonne.append(etiquetteValeur, zone, libelle);
-                graphe.append(colonne);
-            });
-        }
+  if (historique.some((v) => !Number.isFinite(v) || v < 0)) {
+    erreur.textContent = "Renseignez l'historique des 3 mois avec des valeurs positives ou nulles.";
+    zone.hidden = true;
+    return;
+  }
+  erreur.textContent = '';
 
-        function afficherTendance(dernierMois, prediction) {
-            const element = $('tendance');
-            if (dernierMois <= 0) {
-                element.textContent = '';
-                return;
-            }
-            const variation = ((prediction - dernierMois) / dernierMois) * 100;
-            if (Math.abs(variation) < 0.5) {
-                element.textContent = 'Stable par rapport au mois 3';
-            } else {
-                const sens = variation > 0 ? 'Hausse' : 'Baisse';
-                element.textContent = `${sens} de ${formatNombre(Math.abs(variation), 1)} % par rapport au mois 3`;
-            }
-        }
+  const prediction = Math.round(predireCollecte(...historique, mois) * 100) / 100;
 
-        $('formPrediction').addEventListener('submit', function(event) {
-            event.preventDefault();
+  $('moisPrevu').textContent = NOMS_MOIS[mois - 1];
+  $('valeurPredict').textContent = `${fmt(Math.round(prediction))} kg`;
+  afficherTendance(historique[2], prediction);
+  afficherGraphique(historique, prediction);
 
-            const bouton = $('btnPredict');
-            const erreur = $('erreurPredict');
-            const zone = $('resultatPredict');
-            const message = $('messageLogistique');
-            const historique = ['m1', 'm2', 'm3'].map(lireNombre);
-            const dernierMois = parseInt($('dernier_mois').value, 10);
-
-            // Vérification des données
-            if (historique.some((v) => !Number.isFinite(v) || v < 0)) {
-                erreur.textContent = "Renseignez l'historique des 3 mois avec des valeurs positives ou nulles.";
-                zone.hidden = true;
-                return;
-            }
-
-            erreur.textContent = '';
-            bouton.disabled = true;
-            bouton.textContent = 'Calcul en cours…';
-
-            // Simulation d'un petit temps de calcul (pour l'effet visuel)
-            setTimeout(() => {
-                const resultat = calculerPrediction(...historique, dernierMois);
-                const prediction = resultat.prediction;
-
-                $('moisPrevu').textContent = resultat.nom_mois;
-                $('valeurPredict').textContent = formatKg(Math.round(prediction));
-                afficherTendance(historique[2], prediction);
-                afficherGraphique(historique, prediction);
-
-                if (prediction > CAPACITE_PETIT_CAMION) {
-                    message.textContent = 'La quantité prévue dépasse la capacité du petit camion. Attendre et prévoyez un véhicule adapté.';
-                    message.dataset.etat = 'danger';
-                } else {
-                    message.textContent = 'La quantité prévue peut être transportée par un petit camion.';
-                    message.dataset.etat = 'succes';
-                }
-                zone.hidden = false;
-                
-                bouton.disabled = false;
-                bouton.textContent = 'Lancer la prévision';
-            }, 500); // 500ms de délai
-        });
-    </script>
-
+  if (recommander(prediction) === 'camion') {
+    message.textContent = `Envoyer le camion : le seuil de ${fmt(SEUIL_COLLECTE)} kg est atteint.`;
+    message.dataset.etat = 'succes';
+  } else {
+    message.textContent = `Attendre : le seuil de ${fmt(SEUIL_COLLECTE)} kg n'est pas encore atteint.`;
+    message.dataset.etat = 'danger';
+  }
+  zone.hidden = false;
+});
+</script>
 </body>
 </html>
 
